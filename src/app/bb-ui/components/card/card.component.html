@@ -1,0 +1,9 @@
+<div class="max-w-[600px] min-h-[400px] bg-white rounded-lg shadow-md">
+  <div class="title-container gap-4 h-16 rounded-t-lg flex items-center justify-start px-4">
+    <i class="text-white text-2xl font-light" [ngClass]="'fa ' + icon"></i>
+    <h2 class="text-lg font-bold text-gray-800">{{title}}</h2>
+  </div>
+  <div class="p-4 card-body">
+    <ng-content></ng-content>
+  </div>
+</div>

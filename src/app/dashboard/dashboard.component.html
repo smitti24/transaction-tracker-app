@@ -1,0 +1,29 @@
+<div class="flex flex-col items-center justify-center h-screen">
+  <div class="flex gap-8">
+    <app-card title="Make Transfer" [icon]="'fa-light fa-credit-card'">
+      <!-- Move to a seperate component -->
+      <app-transfer></app-transfer>
+    </app-card>
+    <app-card title="Transaction List" [icon]="'fa-light fa-list'">
+      <ng-container *ngIf="!!(transactions$ | async)?.length; else loading">
+        <ng-container *ngFor="let transaction of transactions$ | async">
+          <!-- Move to a seperate component -->
+          <app-transaction-item class="gap-4">
+            <div data-test-hook="transactionColour" [ngStyle]="{'background-color': transaction.categoryCode}"
+              class="w-1 h-12"></div>
+            <div data-test-hook="transactionDate">{{ transaction.dates.valueDate | date }}</div>
+            <div data-test-hook="transactionMerchantName">{{ transaction.merchant.name }}</div>
+            <div data-test-hook="transactionType">{{ transaction.transaction.type }}</div>
+            <div data-test-hook="transactionAmount">{{ transaction.transaction.amountCurrency.amount }}
+              {{ transaction.transaction.amountCurrency.currencyCode }}</div>
+          </app-transaction-item>
+        </ng-container>
+      </ng-container>
+      <ng-template #loading>
+        <div class="flex justify-center text-center w-full animate-pulse text-2xl font-bold text-green-500">
+          Loading...
+        </div>
+      </ng-template>
+    </app-card>
+  </div>
+</div>

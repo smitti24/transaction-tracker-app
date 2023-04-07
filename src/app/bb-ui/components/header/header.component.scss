@@ -1,0 +1,11 @@
+@import '../../styles/vars';
+
+.header {
+  padding: $medium-spacing;
+  @apply bg-white;
+
+  p {
+    color: $primary-green;
+    @apply font-bold
+  }
+}

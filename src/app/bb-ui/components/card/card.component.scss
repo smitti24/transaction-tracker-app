@@ -1,0 +1,15 @@
+@import '../../styles/_vars.scss';
+
+.title-container {
+  background-color: $primary-green;
+
+  h2 {
+    @apply text-white;
+  }
+}
+
+.card-body {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  max-height: 600px;
+}

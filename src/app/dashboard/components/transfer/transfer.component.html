@@ -1,0 +1,52 @@
+<app-modal (submitted)="submitTransaction()" modalTitle="Review Transfer">
+  <div class="m-2">
+    Are you ready to send out this transfer?
+  </div>
+  <div class="m-2">
+    <p class="font-bold">It will be sent to account:</p>
+    <p>{{toAccountValue}}</p>
+  </div>
+  <div class="m-2">
+    <p class="font-bold">With the amount of:</p>
+    <p>€ {{amountValue}}</p>
+  </div>
+</app-modal>
+<div [formGroup]="formGroup">
+  <div class="m-2">
+    <div class="my-2 label">
+      From Account
+    </div>
+    <div>
+      <input class="bg-gray-200 text-gray-600 cursor-not-allowed" [value]="'My Personal Account: ' + (accountTotal$ | async)" readonly>
+    </div>
+  </div>
+  <div class="m-2">
+    <div class="my-2 label">
+      To Account
+    </div>
+    <div>
+      <input formControlName="toAccount" placeholder="type an account name">
+      <div *ngIf="formGroup.controls['toAccount'].invalid && (formGroup.controls['toAccount'].dirty || formGroup.controls['toAccount'].touched)" class="text-red-500 text-sm mt-1">
+        Please enter a valid account name
+      </div>
+    </div>
+  </div>
+
+  <div class="m-2">
+    <div class="my-2 label">
+      Amount
+    </div>
+    <div>
+      <input formControlName="amount" placeholder="type an amount">
+      <div *ngIf="formGroup.controls['amount'].invalid && (formGroup.controls['amount'].dirty || formGroup.controls['amount'].touched)" class="text-red-500 text-sm mt-1">
+        <div *ngIf="formGroup.controls['amount'].errors!['required']">Amount is required</div>
+        <div *ngIf="formGroup.controls['amount'].errors!['min']">Amount should not be below -500</div>
+        <div *ngIf="formGroup.controls['amount'].errors!['invalidAmount'] || !formGroup.controls['amount'].errors!['required']">Amount is invalid</div>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-end m-2 mt-3">
+    <app-submit-button class="submit-button" (submitForm)="openTransferModal()"></app-submit-button>
+  </div>
+</div>
+
