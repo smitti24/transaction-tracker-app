@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { CreditDebtIndicator, Transaction } from './transaction.model';
+import { CreditDebtIndicator, MerchantDetails, Transaction } from './transaction.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +41,36 @@ export class TransactionService implements OnDestroy {
     } else {
       this.userAccountTotal$.next(total);
     }
+  }
+
+  addNewTransaction(transaction: Transaction): void {
+    // Add the new transaction to the list of transactions
+    const transactions = this.transactions$.value;
+    transactions.push(transaction);
+
+    // Sort the transactions by date
+    transactions.sort((a, b) => {
+      return new Date(b.dates.valueDate).getTime() - new Date(a.dates.valueDate).getTime();
+    });
+
+    // Update the transactions$ observable
+    this.transactions$.next(transactions);
+
+    // Update the userAccountTotal$ observable
+    this.sumAllPositiveTransactions(transactions);
+  }
+
+  getMerchantDetails(accountName: string): MerchantDetails {
+    // Get the transaction with the matching account name
+    const merchant = this.transactions$.value.find(transaction => transaction.merchant.name === accountName)?.merchant;
+    if (!merchant) {
+      return {
+        name: 'Merchant Not Found',
+        accountNumber: 'Unknown'
+      }
+    }
+
+    return merchant;
   }
 
 

@@ -1,9 +1,6 @@
 export interface Transaction {
   id: string;
-  merchant: {
-    name: string;
-    accountNumber: string;
-  };
+  merchant: MerchantDetails;
   dates: {
     valueDate: string;
   };
@@ -16,6 +13,11 @@ export interface Transaction {
       amount: number;
     };
   };
+}
+
+export interface MerchantDetails {
+  name: string;
+  accountNumber: string;
 }
 
 export enum CreditDebtIndicator {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, MinValidator, Validators } from '@angular/forms';
 import { map, Observable } from 'rxjs';
 import { ModalService } from 'src/app/bb-ui/components/modal/modal.service';
+import { CreditDebtIndicator, MerchantDetails, Transaction } from '../../data-access/transaction.model';
 import { TransactionService } from '../../data-access/transaction.service';
 
 interface TransferForm {
@@ -55,6 +56,14 @@ export class TransferComponent implements OnInit {
     return null;
   }
 
+  private isAmountCreditOrDebit(amount: string): CreditDebtIndicator {
+    return Number(amount) > 0 ? CreditDebtIndicator.Credit : CreditDebtIndicator.Debit;
+  }
+
+  getMerchantDetails(toAccount: string): MerchantDetails {
+    return this.transactionService.getMerchantDetails(toAccount)
+  }
+
   openTransferModal(): void {
     if (this.formGroup.invalid) {
       return;
@@ -66,13 +75,45 @@ export class TransferComponent implements OnInit {
   submitTransaction(): void {
     this.modalService.setIsModalOpen(true);
 
-    const { amount } = this.formGroup.value;
-    this.transactionService.adjustUserAccountTotal(amount);
+    const { amount, toAccount } = this.formGroup.value;
+    const transaction: Transaction = {
+      id: '123',
+      merchant: this.getMerchantDetails(toAccount),
+      dates: {
+        valueDate: new Date().toISOString()
+      },
+      categoryCode: '#12a580',
+      transaction: {
+        type: 'Online Transfer',
+        creditDebitIndicator: this.isAmountCreditOrDebit(amount),
+        amountCurrency: {
+          currencyCode: 'EUR',
+          amount: Number(amount)
+      }
+    },
+    }
+    this.transactionService.addNewTransaction(transaction);
     this.formGroup.reset();
   }
-
-  transferCancelled(): void {
-    this.formGroup.reset();
-  }
-
 }
+
+
+// export interface Transaction {
+//   id: string;
+//   merchant: {
+//     name: string;
+//     accountNumber: string;
+//   };
+//   dates: {
+//     valueDate: string;
+//   };
+//   categoryCode: string;
+//   transaction: {
+//     type: string;
+//     creditDebitIndicator: CreditDebtIndicator;
+//     amountCurrency: {
+//       currencyCode: string;
+//       amount: number;
+//     };
+//   };
+// }
