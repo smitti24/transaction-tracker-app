@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Transaction } from './data-access/transaction.model';
 import { TransactionService } from './data-access/transaction.service';
@@ -7,7 +7,8 @@ import { TransactionService } from './data-access/transaction.service';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  providers: [TransactionService]
+  providers: [TransactionService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit {
 
@@ -18,4 +19,8 @@ export class DashboardComponent implements OnInit {
   constructor(private transactionService: TransactionService) { }
 
   ngOnInit(): void { }
+
+  trackTransaction(index: number, transaction: Transaction) {
+    return transaction ? transaction.id : null;
+  }
 }

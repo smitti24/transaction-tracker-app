@@ -6,7 +6,7 @@
     </app-card>
     <app-card title="Transaction List" [icon]="'fa-light fa-list'">
       <ng-container *ngIf="!!(transactions$ | async)?.length; else loading">
-        <ng-container *ngFor="let transaction of transactions$ | async">
+        <ng-container *ngFor="let transaction of transactions$ | async; trackBy: trackTransaction">
           <!-- Move to a seperate component -->
           <app-transaction-item class="gap-4">
             <div data-test-hook="transactionColour" [ngStyle]="{'background-color': transaction.categoryCode}"
