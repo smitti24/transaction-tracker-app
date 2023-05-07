@@ -1,26 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Transaction } from './data-access/transaction.model';
-import { TransactionService } from './data-access/transaction.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  providers: [TransactionService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
 
-  get transactions$(): Observable<Transaction[]> {
-    return this.transactionService.getTransactions$();
-  }
-
-  constructor(private transactionService: TransactionService) { }
-
-  ngOnInit(): void { }
-
-  trackTransaction(index: number, transaction: Transaction) {
-    return transaction ? transaction.id : null;
-  }
 }

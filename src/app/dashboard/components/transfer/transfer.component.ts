@@ -50,7 +50,7 @@ export class TransferComponent implements OnInit {
   // custom validation function to check if amount is negative
   private amountValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const amount = Number(control.value);
-    if (!amount || amount <= 0 || isNaN(amount)) {
+    if (!amount || isNaN(amount)) {
       return { invalidAmount: true };
     }
     return null;
@@ -77,7 +77,7 @@ export class TransferComponent implements OnInit {
 
     const { amount, toAccount } = this.formGroup.value;
     const transaction: Transaction = {
-      id: '123',
+      id: '123', // Generate a transaction guid
       merchant: this.getMerchantDetails(toAccount),
       dates: {
         valueDate: new Date().toISOString()
@@ -88,7 +88,7 @@ export class TransferComponent implements OnInit {
         creditDebitIndicator: this.isAmountCreditOrDebit(amount),
         amountCurrency: {
           currencyCode: 'EUR',
-          amount: Number(amount)
+          amount: Math.abs(Number(amount))
       }
     },
     }

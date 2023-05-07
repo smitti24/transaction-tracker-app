@@ -1,0 +1,25 @@
+<ng-container>
+
+</ng-container>
+<ng-container *ngIf="transactions$ | async as transactions; else loading">
+  <div [formGroup]="searchForm" class="flex my-4">
+    <input formControlName="search" placeholder="filter transactions by merchant name">
+  </div>
+  <ng-container *ngFor="let transaction of transactions; trackBy: trackTransaction">
+    <!-- Move to a seperate component -->
+    <app-transaction-item class="gap-4">
+      <div data-test-hook="transactionColour" [ngStyle]="{'background-color': transaction.categoryCode}"
+        class="w-1 h-12"></div>
+      <div data-test-hook="transactionDate">{{ transaction.dates.valueDate | date }}</div>
+      <div data-test-hook="transactionMerchantName">{{ transaction.merchant.name }}</div>
+      <div data-test-hook="transactionType">{{ transaction.transaction.type }}</div>
+      <div data-test-hook="transactionAmount" [ngStyle]="setTransactionStyle(transaction.transaction.creditDebitIndicator)">{{ transaction.transaction.amountCurrency.amount }}
+        {{ transaction.transaction.amountCurrency.currencyCode }}</div>
+    </app-transaction-item>
+  </ng-container>
+</ng-container>
+<ng-template #loading>
+  <div class="flex justify-center text-center w-full animate-pulse text-2xl font-bold text-green-500">
+    Loading...
+  </div>
+</ng-template>
